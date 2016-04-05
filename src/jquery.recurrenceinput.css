@@ -36,6 +36,10 @@ div.riform .label {
     width: 130px;
 }
 
+div.riform label[for] {
+    display: inline;
+}
+
 div.riform #rirtemplate {
     margin-top: 6px;
 }
