@@ -2,6 +2,26 @@
 /*global $, alert, jQuery */
 "use strict";
 
+// Splits HTML input date values into an object with year, month, and day properties.
+function splitDateValue(val) {
+    var dateVal = {
+      year: null,
+      month: null,
+      day: null
+    };
+
+    if (!val) {
+        return dateVal;
+    }
+
+    var splitDate = val.split('-');
+    dateVal.year = splitDate[0];
+    dateVal.month = splitDate[1];
+    dateVal.day = splitDate[2];
+
+    return dateVal;
+}
+
 (function ($) {
     $.tools = $.tools || {version: '@VERSION'};
 
@@ -704,14 +724,17 @@
                     break;
                 case 'BYENDDATE':
                     field = form.find('input[name=rirangebyenddatecalendar]');
-                    date = field.data('dateinput').getValue('yyyymmdd');
-                    result += ';UNTIL=' + date + 'T000000';
+                    date = field.val();
+                    var splitDate = splitDateValue(date);
+                    result += ';UNTIL=' + splitDate.year + splitDate.month + splitDate.day + 'T000000';
+
                     if (tz === true) {
                         // Make it UTC:
                         result += 'Z';
                     }
+
                     human += ', ' + conf.i18n.rangeByEndDateHuman;
-                    human += ' ' + field.data('dateinput').getValue(conf.i18n.longDateFormat);
+                    human += ' ' + date;
                     break;
                 }
                 break;
@@ -1069,7 +1092,7 @@
                         month = until.slice(4, 6);
                         month = parseInt(month, 10) - 1;
                         day = until.slice(6, 8);
-                        input.data('dateinput').setValue(new Date(year, month, day));
+                        input.val(new Date(year, month, day));
                     }
 
                     selectors = field.find('input[name=rirangetype]');
@@ -1170,9 +1193,10 @@
         function occurrenceAdd(event) {
             event.preventDefault();
             var dateinput = form
-                .find('.riaddoccurrence input#adddate')
-                .data('dateinput');
-            var datevalue = dateinput.getValue('yyyymmddT000000');
+                .find('.riaddoccurrence input#adddate');
+            var datevalue = dateinput.val();
+            var splitDate = splitDateValue(dateValue);
+            var dateValue = splitDate.year + splitDate.month + splitDate.day + 'T000000';
             if (form.ical.RDATE === undefined) {
                 form.ical.RDATE = [];
             }
@@ -1185,7 +1209,7 @@
                 form.ical.RDATE.push(datevalue);
                 var html = ['<div class="occurrence rdate" style="display: none;">',
                         '<span class="rdate">',
-                            dateinput.getValue(conf.i18n.longDateFormat),
+                            dateinput.val(),
                             '<span class="rlabel">' + conf.i18n.additionalDate + '</span>',
                         '</span>',
                         '<span class="action">',
@@ -1556,16 +1580,12 @@
             event.preventDefault();
             // if no field errors, process the request
             if (checkFields(form)) {
-                // close overlay
-                // form.overlay().close();
                 recurrenceOn();
             }
         }
 
         function cancel(event) {
             event.preventDefault();
-            // close overlay
-            // form.overlay().close();
         }
 
         function updateOccurances() {
@@ -1589,24 +1609,7 @@
         form = $.tmpl('formTmpl', conf);
 
         // Make an overlay and hide it
-        // form.overlay(conf.formOverlay).hide();
         form.ical = {RDATE: [], EXDATE: []};
-
-        $.tools.dateinput.localize(conf.lang,  {
-            months:      LABELS[conf.lang].months.join(),
-            shortMonths: LABELS[conf.lang].shortMonths.join(),
-            days:        LABELS[conf.lang].weekdays.join(),
-            shortDays:   LABELS[conf.lang].shortWeekdays.join()
-        });
-
-        // Make the date input into a calendar dateinput()
-        form.find('input[name=rirangebyenddatecalendar]').dateinput({
-            selectors: true,
-            lang: conf.lang,
-            format: conf.i18n.shortDateFormat,
-            firstDay: conf.firstDay,
-            yearRange: [-5, 10]
-        }).data('dateinput').setValue(new Date());
 
         if (textarea.val()) {
             var result = widgetLoadFromRfc5545(form, conf, textarea.val(), false);
@@ -1638,13 +1641,6 @@
         );
 
         // Pop up the little add form when clicking "Add"
-        form.find('div.riaddoccurrence input#adddate').dateinput({
-            selectors: true,
-            lang: conf.lang,
-            format: conf.i18n.shortDateFormat,
-            firstDay: conf.firstDay,
-            yearRange: [-5, 10]
-        }).data('dateinput').setValue(new Date());
         form.find('input#addaction').click(occurrenceAdd);
 
         // When the reload button is clicked, reload
