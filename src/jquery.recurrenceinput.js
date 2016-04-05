@@ -1204,7 +1204,7 @@
 
         // element is where to find the tag in question. Can be the form
         // or the display widget. Defaults to the form.
-        function loadOccurrences(startdate, rfc5545, start, readonly) {
+        function loadOccurrences(startdate, rrule, start, readonly) {
             var element, occurrenceDiv;
 
             if (!readonly) {
@@ -1224,7 +1224,7 @@
             var data = {year: year,
                        month: month, // Sending January as 0? I think not.
                        day: day,
-                       rrule: rfc5545,
+                       rrule: rrule,
                        format: conf.i18n.longDateFormat,
                        start: start};
 
@@ -1268,7 +1268,7 @@
                     element.find('.rioccurrences .batching a').click(
                         function (event) {
                             event.preventDefault();
-                            loadOccurrences(startdate, rfc5545, this.attributes.start.value, readonly);
+                            loadOccurrences(startdate, rrule, this.attributes.start.value, readonly);
                         }
                     );
 
@@ -1397,11 +1397,11 @@
 
         // Loading (populating) display and form widget with
         // passed RFC5545 string (data)
-        function loadData(rfc5545) {
+        function loadData(rrule) {
             var selector, format, startdate, dayindex, day;
 
-            if (rfc5545) {
-                widgetLoadFromRfc5545(form, conf, rfc5545, true);
+            if (rrule) {
+                widgetLoadFromRfc5545(form, conf, rrule, true);
             }
 
             startdate = findStartDate();
@@ -1555,7 +1555,7 @@
             // if no field errors, process the request
             if (checkFields(form)) {
                 // close overlay
-                form.overlay().close();
+                // form.overlay().close();
                 recurrenceOn();
             }
         }
@@ -1563,7 +1563,7 @@
         function cancel(event) {
             event.preventDefault();
             // close overlay
-            form.overlay().close();
+            // form.overlay().close();
         }
 
         function updateOccurances() {
@@ -1587,7 +1587,7 @@
         form = $.tmpl('formTmpl', conf);
 
         // Make an overlay and hide it
-        form.overlay(conf.formOverlay).hide();
+        // form.overlay(conf.formOverlay).hide();
         form.ical = {RDATE: [], EXDATE: []};
 
         $.tools.dateinput.localize(conf.lang,  {
@@ -1632,7 +1632,6 @@
                 // Load the form to set up the right fields to show, etc.
                 loadData(textarea.val());
                 e.preventDefault();
-                form.overlay().load();
             }
         );
 
@@ -1706,6 +1705,7 @@
             save: save //Used by tests.
         });
 
+        loadData(textarea.val());
     }
 
 

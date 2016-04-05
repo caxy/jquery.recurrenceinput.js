@@ -1,10 +1,7 @@
 div.riform {
     padding: 1em;
     background-color: white;
-    box-shadow: 0 0 3em 0.5em #666;
     line-height: 2;
-    -moz-box-shadow: 0 0 3em 0.5em #666;
-    -webkit-box-shadow: 0 0 3em #666;
 }
 
 div.riform h1 {
