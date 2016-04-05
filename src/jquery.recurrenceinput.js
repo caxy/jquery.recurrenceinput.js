@@ -1302,6 +1302,7 @@
             }
             return realField;
         }
+
         function findStartDate() {
             var startdate = null;
             var startField, startFieldYear, startFieldMonth, startFieldDay;
@@ -1359,6 +1360,7 @@
             }
             return startdate;
         }
+
         function findEndDate(form) {
             var endField, enddate;
 
@@ -1698,6 +1700,7 @@
          * Public API of RecurrenceInput
          */
 
+
         $.extend(self, {
             display: display,
             form: form,
@@ -1726,7 +1729,8 @@
         // our recurrenceinput widget instance
         var recurrenceinput = new RecurrenceInput(config, this);
         // hide textarea and place display widget after textarea
-        recurrenceinput.form.appendTo('body');
+
+        recurrenceinput.form.insertAfter($(this));
         this.after(recurrenceinput.display);
 
         // hide the textarea
