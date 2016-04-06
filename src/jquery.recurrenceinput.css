@@ -206,7 +206,7 @@ div#calroot {
 
 div.ributtons .risavebutton {
     display: block;
-    margin: 30px auto 0;
+    margin-left: 140px;
 }
 
 // jQueryTools overrides
@@ -224,4 +224,10 @@ div.overlay div.close {
 }
 #calroot {
 	width: auto;
+}
+
+
+/* This button is no longer necessary, so just hide it for now. */
+button[name=riedit] {
+  display: none;
 }
