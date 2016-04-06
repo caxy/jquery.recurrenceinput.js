@@ -131,7 +131,7 @@ function splitDateValue(val) {
         displayActivate: 'Repeats every',
         add_rules: 'Add',
         edit_rules: 'Edit',
-        delete_rules: 'Delete',
+        delete_rules: 'Clear',
         add:  'Add',
         refresh: 'Refresh',
 
@@ -1090,9 +1090,9 @@ function splitDateValue(val) {
                         input = field.find('input[name=rirangebyenddatecalendar]');
                         year = until.slice(0, 4);
                         month = until.slice(4, 6);
-                        month = parseInt(month, 10) - 1;
                         day = until.slice(6, 8);
-                        input.val(new Date(year, month, day));
+
+                        input.val(year + '-' + month + '-' + day);
                     }
 
                     selectors = field.find('input[name=rirangetype]');
@@ -1468,9 +1468,11 @@ function splitDateValue(val) {
             label.text(conf.i18n.displayActivate + ' ' + RFC5545.description);
             textarea.val(RFC5545.result).change();
             var startdate = findStartDate();
+
             if (startdate !== null) {
                 loadOccurrences(startdate, widgetSaveToRfc5545(form, conf, false).result, 0, true);
             }
+
             display.find('button[name="riedit"]').text(conf.i18n.edit_rules);
             display.find('button[name="ridelete"]').show();
         }
