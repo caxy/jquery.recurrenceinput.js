@@ -36,7 +36,8 @@ div.riform .label {
     width: 130px;
 }
 
-div.riform label[for] {
+div.riform label[for],
+label.ridisplay {
     display: inline;
 }
 
