@@ -287,6 +287,7 @@ function splitDateValue(val) {
                 '<button name="riedit">${i18n.add_rules}</button>',
                 '<button name="ridelete" style="display:none">${i18n.delete_rules}</button>',
             '{{/if}}',
+            '<label>Repeat Rule:</label>',
             '<label class="ridisplay">${i18n.displayUnactivate}</label>',
         '</div>',
         '<div class="rioccurrences" style="display:none" /></div>'].join('\n');
